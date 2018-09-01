@@ -1,0 +1,91 @@
+version: 2
+jobs:
+  build:
+    working_directory: /go/src/github.com/Khigashiguchi/khigashiguchi.com
+
+    docker:
+      - image: circleci/golang:1.11.0
+
+    environemnt:
+      GOCACHE: "/tmp/go/cache"
+      DEP_VERSION: 0.5.0
+      TEST_RESULTS: /tmp/test-results
+      API_DIR: /go/src/github.com/Khigashiguchi/khigashiguchi.com/api
+
+    steps:
+      - checkout
+
+      - restore_cache:
+          key: gopkg-{{ .Branch }}-{{ checksum "api/Gopkg.lock" }}
+          paths:
+          - /go/src/github.com/Khigashiguchi/khigashiguchi.com/api/vendor
+
+      - run: mkdir -p $TEST_RESULTS
+
+      - run:
+          name: download-libraries
+          command: |
+            cd api
+            if [ ! -d ${API_DIR}/vendor ]; then
+              curl -L -s https://github.com/golang/dep/releases/download/v${DEP_VERSION}/dep-linux-amd64 -o /go/bin/dep
+              chmod +x /go/bin/dep
+              /go/bin/dep ensure
+            fi
+
+      - save_cache:
+          key: gopkg-{{ .Branch }}-{{ checksum "api/Gopkg.lock" }}
+          paths:
+            - /go/src/github.com/Khigashiguchi/khigashiguchi.com/api/vendor
+
+      - restore_cache:
+          keys:
+            - build-cache-{{ .Branch }}-{{ .Environment.CIRCLE_PREVIOUS_BUILD_NUM }}
+          paths:
+            - /tmp/go/cache
+
+      - run:
+          name: install-tools
+          command: |
+            cd api
+            make tools
+            go get -u github.com/jstemmer/go-junit-report
+
+      - run:
+          name: gofmt
+          command: |
+            test -z "$(go fmt $(go list ./... | grep -v /api/vendor/) | tee /dev/stderr)"
+
+      - run:
+          name: goimports
+          command: |
+            test -z "$(goimports -l $(find . -name "*.go" | grep -v /app/vendor/) | tee /dev/stderr)"
+
+      - run:
+          name: metalint
+          command: |
+            cd api
+            make metalint
+
+      - run:
+          name: build
+          command: |
+            mkdir -p $GOCACHE
+            cd api
+            go build -v
+
+      - run:
+          name: unittest
+          command: |
+            cd api
+            make test
+
+      - save_cache:
+          key: build-cache-{{ .Branch }}-{{ .Environment.CIRCLE_BUILD_NUM }}
+          paths:
+            - /tmp/go/cache
+
+      - store_artifacts:
+          path: /tmp/test-results
+
+      - store_test_results:
+          path: /tmp/test-results
