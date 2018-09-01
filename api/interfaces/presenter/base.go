@@ -16,3 +16,13 @@ func RespondJson(w http.ResponseWriter, body interface{}, code int) {
 		w.WriteHeader(http.StatusInternalServerError)
 	}
 }
+
+type ApiError struct {
+	Message string `json:"message"`
+}
+
+// RespondErrorJson return the error response.
+func RespondErrorJson(w http.ResponseWriter, msg string, code int) {
+	body := ApiError{Message: msg}
+	RespondJson(w, body, code)
+}
