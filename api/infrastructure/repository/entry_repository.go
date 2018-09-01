@@ -1,12 +1,17 @@
-package datastore
+package repository
 
 import "github.com/Khigashiguchi/khigashiguchi.com/api/domain/entity"
 
-// EntryStore implements EntryRepository interface.
-type EntryStore struct{}
+// IEntryRepository is interface of the repository to fetch Entry.
+type IEntryRepository interface {
+	GetAll() ([]entity.Entry, error)
+}
+
+// EntryRepository implements IEntryRepository interface.
+type EntryRepository struct{}
 
 // GetAll get all entries from data store.
-func (s *EntryStore) GetAll() ([]entity.Entry, error) {
+func (s *EntryRepository) GetAll() ([]entity.Entry, error) {
 	// FIXME: 仮実装
 	return []entity.Entry{
 		{

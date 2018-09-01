@@ -5,8 +5,7 @@ import (
 	"os"
 
 	"github.com/Khigashiguchi/khigashiguchi.com/api/domain/entity"
-	"github.com/Khigashiguchi/khigashiguchi.com/api/domain/repository"
-	"github.com/Khigashiguchi/khigashiguchi.com/api/infrastructure/datastore"
+	"github.com/Khigashiguchi/khigashiguchi.com/api/infrastructure/repository"
 )
 
 // GetEntriesUseCaseImpl represents the interface of use case "get entries".
@@ -17,7 +16,7 @@ type GetEntriesUseCase interface {
 // GetEntriesUseCase represents the use case of getting entries.
 // It implements GetEntriesUseCaseImpl interface.
 type getEntriesUseCase struct {
-	EntryRepo repository.EntryRepository
+	EntryRepo repository.IEntryRepository
 }
 
 // Run exec to the use case.
@@ -32,5 +31,5 @@ func (u *getEntriesUseCase) Run() ([]entity.Entry, error) {
 
 // NewGetEntriesUseCase create the use case of getting entries.
 func NewGetEntriesUseCase() GetEntriesUseCase {
-	return &getEntriesUseCase{EntryRepo: &datastore.EntryStore{}}
+	return &getEntriesUseCase{EntryRepo: &repository.EntryRepository{}}
 }
