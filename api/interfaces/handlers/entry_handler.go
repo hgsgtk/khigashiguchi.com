@@ -3,18 +3,33 @@ package handlers
 import (
 	"net/http"
 
-	"github.com/Khigashiguchi/khigashiguchi.com/api/domain/entity"
 	"github.com/Khigashiguchi/khigashiguchi.com/api/interfaces/presenter"
+	"github.com/Khigashiguchi/khigashiguchi.com/api/usecase"
 )
 
+// Handler is interface of handling request.
+type Handler interface {
+	Handler(w http.ResponseWriter, r *http.Request)
+}
+
+type getEntriesHandler struct {
+	UseCase usecase.GetEntriesUseCase
+}
+
 // GetEntriesHandler handle request GET /entries.
-func GetEntriesHandler(w http.ResponseWriter, r *http.Request) {
-	// FIXME: テストを通すための仮実装
+func (h *getEntriesHandler) Handler(w http.ResponseWriter, r *http.Request) {
+	entries, err := h.UseCase.Run()
+	if err != nil {
+		presenter.RespondErrorJson(w, "Internal Server Error", http.StatusInternalServerError)
+		return
+	}
 	res := presenter.GetEntriesResponse{
-		Entities: entity.Entry{
-			Title: "test title",
-			URL:   "http://example.com",
-		},
+		Entities: entries,
 	}
 	presenter.RespondJson(w, res, http.StatusOK)
+}
+
+// NewGetEntriesHandler create new handler of getting entries.
+func NewGetEntriesHandler() Handler {
+	return &getEntriesHandler{UseCase: usecase.NewGetEntriesUseCase()}
 }
