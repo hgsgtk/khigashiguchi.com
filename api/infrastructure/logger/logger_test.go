@@ -1,21 +1,22 @@
 package logger
 
 import (
-	"testing"
-	"os"
 	"io/ioutil"
+	"os"
+	"testing"
+
 	"github.com/google/go-cmp/cmp"
 )
 
 func TestLogger_Error(t *testing.T) {
-	tests := []struct{
-		name string
-		inputMsg string
+	tests := []struct {
+		name        string
+		inputMsg    string
 		expectedMsg string
 	}{
 		{
-			name: "log_msg",
-			inputMsg: "test error message",
+			name:        "log_msg",
+			inputMsg:    "test error message",
 			expectedMsg: "{\"level\":\"error\",\"msg\":\"test error message\"}\n",
 		},
 	}

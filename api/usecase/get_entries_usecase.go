@@ -2,9 +2,10 @@ package usecase
 
 import (
 	"fmt"
+
 	"github.com/Khigashiguchi/khigashiguchi.com/api/domain/entity"
-	"github.com/Khigashiguchi/khigashiguchi.com/api/infrastructure/repository"
 	"github.com/Khigashiguchi/khigashiguchi.com/api/infrastructure/logger"
+	"github.com/Khigashiguchi/khigashiguchi.com/api/infrastructure/repository"
 )
 
 // GetEntriesUseCaseImpl represents the interface of use case "get entries".
