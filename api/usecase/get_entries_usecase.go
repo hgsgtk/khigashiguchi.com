@@ -2,9 +2,9 @@ package usecase
 
 import (
 	"fmt"
-	"os"
 
 	"github.com/Khigashiguchi/khigashiguchi.com/api/domain/entity"
+	"github.com/Khigashiguchi/khigashiguchi.com/api/infrastructure/logger"
 	"github.com/Khigashiguchi/khigashiguchi.com/api/infrastructure/repository"
 )
 
@@ -23,7 +23,7 @@ type getEntriesUseCase struct {
 func (u *getEntriesUseCase) Run() ([]entity.Entry, error) {
 	entries, err := u.EntryRepo.GetAll()
 	if err != nil {
-		fmt.Fprintf(os.Stdout, "failed to get entries entities: %#v", err)
+		logger.Error(fmt.Sprintf("failed to get entries entities: %#v", err))
 		return nil, err
 	}
 	return entries, nil
