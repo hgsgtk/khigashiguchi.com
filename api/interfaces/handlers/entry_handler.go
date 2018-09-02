@@ -5,6 +5,7 @@ import (
 
 	"github.com/Khigashiguchi/khigashiguchi.com/api/interfaces/presenter"
 	"github.com/Khigashiguchi/khigashiguchi.com/api/usecase"
+	"github.com/Khigashiguchi/khigashiguchi.com/api/infrastructure/logger"
 )
 
 // Handler is interface of handling request.
