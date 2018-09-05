@@ -14,7 +14,7 @@ type (
 		Prepare(string) (*sql.Stmt, error)
 	}
 	Beginner interface {
-		Begin() (Tx, error)
+		Begin() (*sql.Tx, error)
 	}
 )
 
@@ -22,7 +22,12 @@ type Executor interface {
 	Execer
 	Queryer
 	Preparer
-	//Beginner
+	Beginner
+}
+
+type Executer interface {
+	Execer
+	Preparer
 }
 
 type Tx interface {

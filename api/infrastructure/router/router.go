@@ -12,11 +12,9 @@ import (
 func New(db repository.Executor) http.Handler {
 	r := mux.NewRouter()
 
-	// create handlers
-	getEntries := handlers.NewGetEntriesHandler(db)
-
 	// create api endpoint
-	r.Methods("GET").Path("/api/entries").HandlerFunc(getEntries.Handler)
+	r.Methods("GET").Path("/api/entries").HandlerFunc(handlers.NewGetEntriesHandler(db).Handler)
+	r.Methods("POST").Path("/api/entries").HandlerFunc(handlers.NewPostEntriesHandler(db).Handler)
 
 	// create health check endpoint
 	r.Methods("GET").Path("/.health_check").HandlerFunc(func(w http.ResponseWriter, r *http.Request) {

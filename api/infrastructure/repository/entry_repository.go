@@ -5,6 +5,7 @@ import "github.com/Khigashiguchi/khigashiguchi.com/api/domain/entity"
 // IEntryRepository is interface of the repository to fetch Entry.
 type IEntryRepository interface {
 	GetAll(db Executor) ([]entity.Entry, error)
+	Save(db Executer, entry entity.Entry) error
 }
 
 // EntryRepository implements IEntryRepository interface.
@@ -31,4 +32,17 @@ func (s *EntryRepository) GetAll(db Executor) ([]entity.Entry, error) {
 		return nil, err
 	}
 	return entries, nil
+}
+
+func (s *EntryRepository) Save(db Executer, entry entity.Entry) error {
+	sql := "INSERT INTO `entries` (title, url) VALUES (?, ?)"
+	stmt, err := db.Prepare(sql)
+	if err != nil {
+		return err
+	}
+	_, err = stmt.Exec(entry.Title, entry.URL)
+	if err != nil {
+		return err
+	}
+	return nil
 }
