@@ -3,16 +3,17 @@ package router
 import (
 	"net/http"
 
+	"github.com/Khigashiguchi/khigashiguchi.com/api/infrastructure/repository"
 	"github.com/Khigashiguchi/khigashiguchi.com/api/interfaces/handlers"
 	"github.com/gorilla/mux"
 )
 
 // New create http routing.
-func New() http.Handler {
+func New(db repository.Executor) http.Handler {
 	r := mux.NewRouter()
 
 	// create handlers
-	getEntries := handlers.NewGetEntriesHandler()
+	getEntries := handlers.NewGetEntriesHandler(db)
 
 	// create api endpoint
 	r.Methods("GET").Path("/api/entries").HandlerFunc(getEntries.Handler)

@@ -3,6 +3,7 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/Khigashiguchi/khigashiguchi.com/api/infrastructure/repository"
 	"github.com/Khigashiguchi/khigashiguchi.com/api/interfaces/presenter"
 	"github.com/Khigashiguchi/khigashiguchi.com/api/usecase"
 )
@@ -30,6 +31,6 @@ func (h *getEntriesHandler) Handler(w http.ResponseWriter, r *http.Request) {
 }
 
 // NewGetEntriesHandler create new handler of getting entries.
-func NewGetEntriesHandler() Handler {
-	return &getEntriesHandler{UseCase: usecase.NewGetEntriesUseCase()}
+func NewGetEntriesHandler(db repository.Executor) Handler {
+	return &getEntriesHandler{UseCase: usecase.NewGetEntriesUseCase(db)}
 }

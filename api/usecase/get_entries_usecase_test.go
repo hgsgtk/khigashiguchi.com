@@ -4,7 +4,10 @@ import (
 	"errors"
 	"testing"
 
+	"database/sql"
+
 	"github.com/Khigashiguchi/khigashiguchi.com/api/domain/entity"
+	"github.com/Khigashiguchi/khigashiguchi.com/api/infrastructure/repository"
 	"github.com/Khigashiguchi/khigashiguchi.com/api/usecase"
 	"github.com/google/go-cmp/cmp"
 )
@@ -76,6 +79,24 @@ type mockEntriesRepo struct {
 	mGetAll func() ([]entity.Entry, error)
 }
 
-func (m *mockEntriesRepo) GetAll() ([]entity.Entry, error) {
+func (m *mockEntriesRepo) GetAll(db repository.Executor) ([]entity.Entry, error) {
 	return m.mGetAll()
+}
+
+type mockExecutor struct{}
+
+func (*mockExecutor) Exec(string, ...interface{}) (sql.Result, error) {
+	panic("implement me")
+}
+
+func (*mockExecutor) Query(string, ...interface{}) (*sql.Rows, error) {
+	panic("implement me")
+}
+
+func (*mockExecutor) QueryRow(string, ...interface{}) *sql.Row {
+	panic("implement me")
+}
+
+func (*mockExecutor) Prepare(string) (*sql.Stmt, error) {
+	panic("implement me")
 }
