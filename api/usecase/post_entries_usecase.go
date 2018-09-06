@@ -9,6 +9,7 @@ import (
 	"github.com/Khigashiguchi/khigashiguchi.com/api/infrastructure/repository"
 )
 
+// PostEntriesUseCase is the use case of post entry entity.
 type PostEntriesUseCase interface {
 	Run(entry entity.Entry) error
 }
@@ -18,6 +19,7 @@ type postEntriesUseCase struct {
 	EntryRepo repository.IEntryRepository
 }
 
+// Run executes to the use case logic.
 func (u *postEntriesUseCase) Run(entry entity.Entry) error {
 	tx, err := u.DB.Begin()
 	if err != nil {
@@ -49,6 +51,7 @@ func (u *postEntriesUseCase) Run(entry entity.Entry) error {
 	return nil
 }
 
+// NewPostEntriesUseCase creates the struct which implements PostEntriesUseCase interface.
 func NewPostEntriesUseCase(db repository.Beginner) PostEntriesUseCase {
 	return &postEntriesUseCase{
 		DB:        db,
