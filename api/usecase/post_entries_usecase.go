@@ -14,12 +14,12 @@ type PostEntriesUseCase interface {
 }
 
 type postEntriesUseCase struct {
-	db        repository.Executor
+	DB        repository.Beginner
 	EntryRepo repository.IEntryRepository
 }
 
 func (u *postEntriesUseCase) Run(entry entity.Entry) error {
-	tx, err := u.db.Begin()
+	tx, err := u.DB.Begin()
 	if err != nil {
 		if err := tx.Rollback(); err != nil {
 			fmt.Fprintf(os.Stdout, "failed to commit and rollback transaction in postEntriesUseCase.Run(): %s", err)
@@ -49,8 +49,8 @@ func (u *postEntriesUseCase) Run(entry entity.Entry) error {
 	return nil
 }
 
-func NewPostEntriesUseCase(db repository.Executor) PostEntriesUseCase {
+func NewPostEntriesUseCase(db repository.Beginner) PostEntriesUseCase {
 	return &postEntriesUseCase{
-		db:        db,
+		DB:        db,
 		EntryRepo: &repository.EntryRepository{}}
 }

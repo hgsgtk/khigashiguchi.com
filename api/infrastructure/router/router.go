@@ -9,7 +9,7 @@ import (
 )
 
 // New create http routing.
-func New(db repository.Executor) http.Handler {
+func New(db repository.DBConnector) http.Handler {
 	r := mux.NewRouter()
 
 	// create api endpoint

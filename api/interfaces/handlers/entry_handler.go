@@ -3,10 +3,10 @@ package handlers
 import (
 	"net/http"
 
+	"github.com/Khigashiguchi/khigashiguchi.com/api/domain/entity"
 	"github.com/Khigashiguchi/khigashiguchi.com/api/infrastructure/repository"
 	"github.com/Khigashiguchi/khigashiguchi.com/api/interfaces/presenter"
 	"github.com/Khigashiguchi/khigashiguchi.com/api/usecase"
-	"github.com/Khigashiguchi/khigashiguchi.com/api/domain/entity"
 	"github.com/gin-gonic/gin/json"
 )
 
@@ -33,7 +33,7 @@ func (h *getEntriesHandler) Handler(w http.ResponseWriter, r *http.Request) {
 }
 
 // NewGetEntriesHandler create new handler of getting entries.
-func NewGetEntriesHandler(db repository.Executor) Handler {
+func NewGetEntriesHandler(db repository.DB) Handler {
 	return &getEntriesHandler{UseCase: usecase.NewGetEntriesUseCase(db)}
 }
 
@@ -53,6 +53,6 @@ func (h *postEntriesHandler) Handler(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-func NewPostEntriesHandler(db repository.Executor) Handler {
+func NewPostEntriesHandler(db repository.Beginner) Handler {
 	return &postEntriesHandler{UseCase: usecase.NewPostEntriesUseCase(db)}
 }

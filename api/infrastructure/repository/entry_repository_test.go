@@ -51,3 +51,45 @@ func TestEntryStore_GetAll(t *testing.T) {
 		})
 	}
 }
+
+func TestEntryRepository_Save(t *testing.T) {
+	tests := []struct {
+		name     string
+		input    entity.Entry
+		expected error
+	}{
+		{
+			name: "save_1_record",
+			input: entity.Entry{
+				Title: "test title",
+				URL:   "http://example.com",
+			},
+			expected: nil,
+		},
+	}
+
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			db, mock, err := sqlmock.New()
+			if err != nil {
+				t.Fatalf("unexpected error: %s", err)
+			}
+			defer db.Close()
+			mock.ExpectPrepare("INSERT INTO").
+				ExpectExec().
+				WithArgs(tt.input.Title, tt.input.URL).
+				WillReturnResult(sqlmock.NewResult(1, 1))
+
+			r := repository.EntryRepository{}
+
+			res := r.Save(db, tt.input)
+
+			if err := mock.ExpectationsWereMet(); err != nil {
+				t.Errorf("there were unfulfilled expectations: %s", err)
+			}
+			if tt.expected != res {
+				t.Errorf("expected error: %#v, given error: %#v", tt.expected, res)
+			}
+		})
+	}
+}

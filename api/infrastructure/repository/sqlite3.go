@@ -7,7 +7,7 @@ import (
 )
 
 // NewSqlite3 create new sqlite3 connection.
-func NewSqlite3(ds string) (Executor, error) {
+func NewSqlite3(ds string) (DBConnector, error) {
 	db, err := sql.Open("sqlite3", ds)
 	if err != nil {
 		return nil, err
